@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+.vite/
+
+# Foundry
+contracts/out/
+contracts/cache/
+
+# Environment — never commit secrets or contract addresses
+.env
+.env.local
+.env.*.local
+
+# Circle credentials
+.circle/
+
+# Logs
+*.log
+/tmp/
+
+# OS
+.DS_Store
+Thumbs.db
