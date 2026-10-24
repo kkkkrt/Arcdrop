@@ -5,9 +5,10 @@ import { AlertTriangle } from 'lucide-react'
 import Dashboard from './components/Dashboard'
 import ClaimPage from './components/ClaimPage'
 import ConfigGuard from './components/ConfigGuard'
+import AboutPage from './components/AboutPage'
 import { useNetwork } from './NetworkContext'
 
-type View = 'dashboard' | 'claim'
+type View = 'dashboard' | 'claim' | 'about'
 
 function getInitialDrop(): bigint | null {
   const params = new URLSearchParams(window.location.search)
@@ -37,6 +38,12 @@ export default function App() {
 
   const goToDashboard = () => {
     setView('dashboard')
+    setClaimDropId(null)
+    window.history.pushState({}, '', window.location.pathname)
+  }
+
+  const goToAbout = () => {
+    setView('about')
     setClaimDropId(null)
     window.history.pushState({}, '', window.location.pathname)
   }
@@ -77,22 +84,34 @@ export default function App() {
             boxShadow: '0 2px 16px rgba(18,45,69,0.06)',
           }}
         >
-          <button onClick={goToDashboard} className="flex items-center gap-2.5 focus:outline-none">
-            {/* Logo mark */}
-            <div
-              className="relative flex items-center justify-center w-8 h-8 rounded-xl overflow-hidden"
-              style={{ background: 'var(--accent)' }}
-            >
+          <div className="flex items-center gap-3">
+            <button onClick={goToDashboard} className="flex items-center gap-2.5 focus:outline-none">
+              {/* Logo mark */}
               <div
-                className="absolute inset-0 opacity-30"
-                style={{ background: spectral }}
-              />
-              <span className="relative z-10 text-white font-black text-xs tracking-tight">AD</span>
-            </div>
-            <span className="display text-base font-bold tracking-tight" style={{ color: 'var(--ink)' }}>
-              ArcDrop
-            </span>
-          </button>
+                className="relative flex items-center justify-center w-8 h-8 rounded-xl overflow-hidden"
+                style={{ background: 'var(--accent)' }}
+              >
+                <div
+                  className="absolute inset-0 opacity-30"
+                  style={{ background: spectral }}
+                />
+                <span className="relative z-10 text-white font-black text-xs tracking-tight">AD</span>
+              </div>
+              <span className="display text-base font-bold tracking-tight" style={{ color: 'var(--ink)' }}>
+                ArcDrop
+              </span>
+            </button>
+            <button
+              onClick={goToAbout}
+              className="hidden sm:block text-xs font-semibold px-2.5 py-1 rounded-lg transition-colors"
+              style={{
+                color: view === 'about' ? 'var(--accent)' : 'var(--subtle)',
+                background: view === 'about' ? 'rgba(18,45,69,0.08)' : 'transparent',
+              }}
+            >
+              About
+            </button>
+          </div>
 
           <div className="flex items-center gap-2">
 
@@ -177,6 +196,7 @@ export default function App() {
           {view === 'claim' && claimDropId !== null && (
             <ClaimPage dropId={claimDropId} onBack={goToDashboard} />
           )}
+          {view === 'about' && <AboutPage onBack={goToDashboard} />}
         </main>
       </ConfigGuard>
     </div>

@@ -245,7 +245,6 @@ function DropList({ address, dropCount, onShare, onRefetch, chainId, dropListCha
         <p className="text-xs font-bold uppercase tracking-[0.1em]" style={{ color: 'var(--subtle)' }}>
           Your Drops
         </p>
-        <p className="text-xs" style={{ color: 'var(--subtle)' }}>{ids.length} total</p>
       </div>
       <div className="space-y-3">
         {ids.map(id => (
@@ -308,13 +307,17 @@ function DropCard({ dropId, myAddress, onShare, onRefetch, walletChainId, chainI
   })
 
   if (!raw) {
+    // Show a slim skeleton while loading — it disappears for non-owned drops
     return (
-      <div className="rounded-2xl h-24 animate-pulse" style={{ background: 'rgba(255,255,255,0.5)' }} />
+      <div className="rounded-2xl h-5 animate-pulse" style={{ background: 'rgba(255,255,255,0.3)' }} />
     )
   }
 
   const drop = raw
   const isOwner = drop.creator.toLowerCase() === myAddress.toLowerCase()
+
+  // Only show drops created by the connected wallet
+  if (!isOwner) return null
   const active = isDropActive(drop)
   const pct = dropProgress(drop)
   const decimals = USDC_DECIMALS
